@@ -2,10 +2,11 @@ import {
   IsBoolean,
   IsDateString,
   IsInt,
-  Length,
+  IsOptional,
   Max,
   Min,
 } from 'class-validator';
+import mongoose from 'mongoose';
 
 export class CreateSaleDto {
   @IsInt()
@@ -21,4 +22,7 @@ export class CreateSaleDto {
 
   @IsDateString()
   private endAt: Date;
+
+  @IsOptional()
+  private productId: mongoose.Types.ObjectId;
 }

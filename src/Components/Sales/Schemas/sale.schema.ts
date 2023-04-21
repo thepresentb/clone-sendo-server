@@ -12,20 +12,23 @@ export class Sale {
   @Prop()
   saleStatus: boolean;
 
-  @Prop()
-  startAt: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: false })
+  productId?: mongoose.Schema.Types.ObjectId;
 
-  @Prop()
-  endAt: string;
+  @Prop({ type: mongoose.Schema.Types.Date })
+  startAt: Date;
 
-  @Prop()
-  deletedAt: string;
+  @Prop({ type: mongoose.Schema.Types.Date })
+  endAt: Date;
 
-  @Prop()
-  updatedAt: string;
+  @Prop({ type: mongoose.Schema.Types.Date })
+  deletedAt: Date;
 
-  @Prop()
-  createdAt: string;
+  @Prop({ type: mongoose.Schema.Types.Date })
+  updatedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.Date })
+  createdAt: Date;
 }
 
 export type SaleDocument = HydratedDocument<Sale>;
