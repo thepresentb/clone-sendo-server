@@ -3,7 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as dotenvConfig from 'dotenv';
 import { CategoryModule } from './Components/Categories/category.module';
 import { SaleModule } from './Components/Sales/sale.module';
-// import { ProductModule } from './Components/products/product.module';
+import { BrandModule } from './Components/Brands/brand.module';
+import { ShopModule } from './Components/Shops/shop.module';
 
 dotenvConfig.config();
 
@@ -12,8 +13,8 @@ dotenvConfig.config();
     MongooseModule.forRoot(process.env.MONGODB_URL),
     CategoryModule,
     SaleModule,
+    BrandModule,
+    ShopModule,
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}
