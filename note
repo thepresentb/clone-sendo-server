@@ -5,3 +5,6 @@ stars : id, 1-5 star, total,
 shops : id, name, address, code
 brandId: id, name, code
 sales: id, salePercent, saleStatus 
+
+
+test
