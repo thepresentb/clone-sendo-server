@@ -12,9 +12,6 @@ export class Sale {
   @Prop()
   saleStatus: boolean;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: false })
-  productId?: mongoose.Schema.Types.ObjectId;
-
   @Prop({ type: mongoose.Schema.Types.Date })
   startAt: Date;
 

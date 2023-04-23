@@ -1,7 +1,7 @@
-products: id, name, categoryDetailId, shopId, brandId?, isInstallment (boolean), isExpressDelivery(boolean), quantity, total
+products: id, name, categoryDetailId, shopId, brandId, isInstallment (boolean), isExpressDelivery(boolean), quantity, total
       price, create, update, delete, rate, saleId?
 
 shops : id, name, address, code
 brandId: id, name, code
-sales: id, salePercent, productId, saleStatus 
+sales: id, salePercent, saleStatus 
 

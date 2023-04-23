@@ -16,7 +16,7 @@ export class CategoryDetail {
   imgUrl: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
-  categoryId: ObjectId;
+  categoryId: mongoose.Schema.Types.ObjectId;
 }
 
 export type CategoryDetailDocument = HydratedDocument<CategoryDetail>;

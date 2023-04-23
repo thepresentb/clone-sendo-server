@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { ResponseBuilder } from 'src/Utils/ResponseBuilder';
 import { ResponseCodeEnum } from 'src/constant/responseCode.enum';
 import { ResponsePayload } from 'src/Utils/ResponsePayload';
@@ -13,6 +13,19 @@ export class SaleController {
   async create(@Body() createSaleDto: CreateSaleDto): Promise<ResponsePayload> {
     try {
       const result = await this.saleService.create(createSaleDto);
+      return new ResponseBuilder(result).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
+  @Get()
+  async findAll() {
+    try {
+      const result = await this.saleService.findAll();
       return new ResponseBuilder(result).build();
     } catch (err) {
       return new ResponseBuilder()

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body } from '@nestjs/common';
 import { BrandService } from './brand.service';
 import { CreateBrandDto } from './dto/createBrand.dto';
 import { ResponsePayload } from 'src/Utils/ResponsePayload';
@@ -15,6 +15,19 @@ export class BrandController {
   ): Promise<ResponsePayload> {
     try {
       const result = await this.brandService.create(createBrandDto);
+      return new ResponseBuilder(result).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
+  @Get()
+  async findAll() {
+    try {
+      const result = await this.brandService.findAll();
       return new ResponseBuilder(result).build();
     } catch (err) {
       return new ResponseBuilder()
