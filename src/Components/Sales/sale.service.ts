@@ -9,4 +9,17 @@ export class SaleService extends BaseService<Sale> {
   constructor(@InjectModel(Sale.name) private saleModel: Model<Sale>) {
     super(saleModel);
   }
+
+  public async findSaleActive(): Promise<Sale[]> {
+    const saleList: Sale[] = await this.saleModel.find({
+      saleStatus: true,
+      startAt: {
+        $lte: new Date(),
+      },
+      endAt: {
+        $gte: new Date(),
+      },
+    });
+    return saleList;
+  }
 }
