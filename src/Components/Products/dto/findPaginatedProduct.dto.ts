@@ -4,13 +4,21 @@ import mongoose, { SortOrder } from 'mongoose';
 export class FindPaginatedProductDto {
   @IsOptional()
   public filter: {
-    name?: string;
+    name?: RegExp;
     isInstallment?: boolean;
     isExpressDelivery?: boolean;
-    price?: number[];
-    rate?: number[];
-    saleId?: mongoose.Types.ObjectId;
-    createdAt?: Date;
+    price?: {
+      $gte: number;
+      $lte: number;
+    };
+    rate?: {
+      $gte: number;
+      $lte?: number;
+    };
+    categoryDetailId?: mongoose.Types.ObjectId;
+    createdAt?: {
+      $lt: Date;
+    };
   };
 
   @IsNumber()
