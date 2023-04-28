@@ -11,7 +11,7 @@ export abstract class BaseService<T> {
     return await this.baseService.create(data);
   }
 
-  public async updateById(
+  public async update(
     filter: any,
     fieldUpdate: any,
   ): Promise<UpdateWriteOpResult> {

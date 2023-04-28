@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { BaseService } from 'src/Base/AbstractService.base';
 import { Product } from './Schemas/product.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { FindPaginatedProductDto } from './dto/findPaginatedProduct.dto';
+import { PaginatedProductDto } from './dto/pagiantedResponsive.dto';
 
 @Injectable()
 export class ProductService extends BaseService<Product> {
@@ -13,13 +14,34 @@ export class ProductService extends BaseService<Product> {
     super(productService);
   }
 
+  async findProductById(id: ObjectId): Promise<Product> {
+    const product = await this.productService.find({ _id: id }).populate([
+      {
+        path: 'categoryDetailId',
+        populate: {
+          path: 'categoryId',
+        },
+      },
+      {
+        path: 'saleId',
+      },
+      {
+        path: 'shopId',
+      },
+      {
+        path: 'brandId',
+      },
+    ]);
+    return product.length > 0 ? product[0] : null;
+  }
+
   async findWithPopulate(filter: any, fields: string[]): Promise<Product[]> {
     return await this.productService.find(filter).populate(fields);
   }
 
   async findPaginatedProducts(
     findPaginatedProductDto: FindPaginatedProductDto,
-  ): Promise<any> {
+  ): Promise<PaginatedProductDto> {
     if (findPaginatedProductDto?.filter?.name) {
       findPaginatedProductDto.filter.name = new RegExp(
         findPaginatedProductDto.filter.name,
@@ -27,13 +49,22 @@ export class ProductService extends BaseService<Product> {
       );
     }
 
+    const sortLastProduct = JSON.parse(
+      JSON.stringify(findPaginatedProductDto.orderBy),
+    );
+
+    if (sortLastProduct?.createdAt)
+      sortLastProduct.createdAt = -sortLastProduct?.createdAt;
+    if (sortLastProduct?.rate) sortLastProduct.rate = -sortLastProduct?.rate;
+    if (sortLastProduct?.price) sortLastProduct.price = -sortLastProduct?.price;
+
     const total = await this.productService
       .count(findPaginatedProductDto.filter)
       .sort(findPaginatedProductDto.orderBy);
 
     const lastProduct = await this.productService
       .find(findPaginatedProductDto.filter)
-      .sort(findPaginatedProductDto.orderBy)
+      .sort(sortLastProduct)
       .limit(1);
 
     const paginatedProducts = await this.productService

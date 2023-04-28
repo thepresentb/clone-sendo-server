@@ -8,6 +8,7 @@ import { SaleService } from '../Sales/sale.service';
 import { Sale } from '../Sales/Schemas/sale.schema';
 import { Product } from './Schemas/product.schema';
 import { FindPaginatedProductDto } from './dto/findPaginatedProduct.dto';
+import { ObjectId } from 'mongoose';
 
 @Controller('products')
 export class ProductController {
@@ -15,21 +16,6 @@ export class ProductController {
     private readonly productService: ProductService,
     private readonly saleService: SaleService,
   ) {}
-
-  @Post()
-  async create(
-    @Body() createProductDto: CreateProductDto,
-  ): Promise<ResponsePayload> {
-    try {
-      const result = await this.productService.create(createProductDto);
-      return new ResponseBuilder(result).build();
-    } catch (err) {
-      return new ResponseBuilder()
-        .withCode(ResponseCodeEnum.BAD_REQUEST)
-        .withMessage(err.message)
-        .build();
-    }
-  }
 
   @Get('flash_sale')
   async findFlashSale(): Promise<ResponsePayload> {
@@ -50,6 +36,21 @@ export class ProductController {
     return new ResponseBuilder(result).build();
   }
 
+  @Post()
+  async create(
+    @Body() createProductDto: CreateProductDto,
+  ): Promise<ResponsePayload> {
+    try {
+      const result = await this.productService.create(createProductDto);
+      return new ResponseBuilder(result).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
   @Post('paginate')
   async findPaginatedProducts(
     @Body() findPaginatedProductDto: FindPaginatedProductDto,
@@ -67,8 +68,16 @@ export class ProductController {
     }
   }
 
-  // @Get('popu')
-  // async findPopu() {
-  //   return this.productService.findWithPopulate();
-  // }
+  @Post('/info')
+  async findProductById(@Body() { id }: { id: ObjectId }) {
+    try {
+      const result = await this.productService.findProductById(id);
+      return new ResponseBuilder(result).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
 }

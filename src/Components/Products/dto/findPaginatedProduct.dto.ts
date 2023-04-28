@@ -1,5 +1,5 @@
 import { IsNumber, IsOptional, Max, Min } from 'class-validator';
-import mongoose, { SortOrder } from 'mongoose';
+import { ObjectId, SortOrder } from 'mongoose';
 
 export class FindPaginatedProductDto {
   @IsOptional()
@@ -15,7 +15,7 @@ export class FindPaginatedProductDto {
       $gte: number;
       $lte?: number;
     };
-    categoryDetailId?: mongoose.Types.ObjectId;
+    categoryDetailId?: ObjectId;
     createdAt?: {
       $lt: Date;
     };
