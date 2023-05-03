@@ -49,14 +49,14 @@ export class ProductService extends BaseService<Product> {
       );
     }
 
-    const sortLastProduct = JSON.parse(
-      JSON.stringify(findPaginatedProductDto.orderBy),
-    );
+    const sortLastProduct = findPaginatedProductDto?.orderBy
+      ? JSON.parse(JSON.stringify(findPaginatedProductDto.orderBy))
+      : { createdAt: -1 };
 
-    if (sortLastProduct?.createdAt)
-      sortLastProduct.createdAt = -sortLastProduct?.createdAt;
-    if (sortLastProduct?.rate) sortLastProduct.rate = -sortLastProduct?.rate;
-    if (sortLastProduct?.price) sortLastProduct.price = -sortLastProduct?.price;
+    // reverse order by to get last product
+    Object.keys(sortLastProduct).forEach(
+      (key) => (sortLastProduct[key] = -sortLastProduct[key]),
+    );
 
     const total = await this.productService
       .count(findPaginatedProductDto.filter)
