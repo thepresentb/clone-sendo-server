@@ -55,9 +55,7 @@ export class BagController {
           .build();
       }
 
-      const result = await this.bagService.find({
-        accountId,
-      });
+      const result = await this.bagService.findWithPopulate(accountId);
       return new ResponseBuilder(result).build();
     } catch (err) {
       return new ResponseBuilder()
