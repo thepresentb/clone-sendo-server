@@ -68,7 +68,7 @@ export class ProductController {
     }
   }
 
-  @Post('/info')
+  @Post('info')
   async findProductById(@Body() { id }: { id: ObjectId }) {
     try {
       const result = await this.productService.findProductById(id);
