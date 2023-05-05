@@ -35,7 +35,10 @@ export class BagController {
           .build();
       }
 
-      const result = await this.bagService.create(createBagDto);
+      await this.bagService.create(createBagDto);
+      const result = await this.bagService.findWithPopulate(
+        createBagDto.accountId,
+      );
       return new ResponseBuilder(result).build();
     } catch (err) {
       return new ResponseBuilder()
@@ -55,6 +58,29 @@ export class BagController {
           .build();
       }
 
+      const result = await this.bagService.findWithPopulate(accountId);
+      return new ResponseBuilder(result).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
+  @Post('delete')
+  async deleteBag(@Body() { bagId }: { bagId: ObjectId }) {
+    try {
+      const bag = await this.bagService.findOne({ _id: bagId });
+      if (!bag) {
+        return new ResponseBuilder()
+          .withCode(ResponseCodeEnum.BAD_REQUEST)
+          .withMessage('bagId not found')
+          .build();
+      }
+
+      const accountId = bag.accountId;
+      await this.bagService.deleteOne({ _id: bagId });
       const result = await this.bagService.findWithPopulate(accountId);
       return new ResponseBuilder(result).build();
     } catch (err) {
