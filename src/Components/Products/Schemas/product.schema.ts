@@ -56,4 +56,8 @@ export type ProductDocument = HydratedDocument<Product>;
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
 
+ProductSchema.index({
+  name: 'text',
+});
+
 ProductSchema.set('timestamps', true);

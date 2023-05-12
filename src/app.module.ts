@@ -8,6 +8,7 @@ import { ShopModule } from './Components/Shops/shop.module';
 import { ProductModule } from './Components/Products/product.module';
 import { AccountModule } from './Components/Accounts/account.module';
 import { BagModule } from './Components/Bags/bag.module';
+import { BillModule } from './Components/Bills/bill.module';
 
 dotenvConfig.config();
 
@@ -21,6 +22,7 @@ dotenvConfig.config();
     ProductModule,
     AccountModule,
     BagModule,
+    BillModule,
   ],
 })
 export class AppModule {}

@@ -5,8 +5,6 @@ import { BagController } from './bag.controller';
 import { BagService } from './bag.service';
 import { AccountService } from '../Accounts/account.service';
 import { ProductService } from '../Products/product.service';
-import { AccountModule } from '../Accounts/account.module';
-import { ProductModule } from '../Products/product.module';
 import { Account, AccountSchema } from '../Accounts/Schemas/account.schema';
 import { Product, ProductSchema } from '../Products/Schemas/product.schema';
 
