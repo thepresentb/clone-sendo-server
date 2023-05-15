@@ -1,4 +1,4 @@
-import { AccountService, RoleService } from './account.service';
+import { AccountService, AddressService, RoleService } from './account.service';
 import { Body, Controller, Post, Req, Get } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { ResponseBuilder } from 'src/Utils/ResponseBuilder';
@@ -8,12 +8,15 @@ import * as bcrypt from 'bcrypt';
 import { ResponsePayload } from 'src/Utils/ResponsePayload';
 import { LoginDto } from './dto/login.dto';
 import { Request } from 'express';
+import { CreateAddressDto } from './dto/createAddress.dto';
+import { ObjectId } from 'mongoose';
 
 @Controller('accounts')
 export class AccountsController {
   constructor(
     private readonly roleService: RoleService,
     private readonly accountService: AccountService,
+    private readonly addressService: AddressService,
   ) {}
 
   @Post('register')
@@ -144,6 +147,51 @@ export class AccountsController {
       const user = await this.accountService.findOne({ _id: decoded._id });
       const { password, ...resUser } = user['_doc'];
       return new ResponseBuilder(resUser).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
+  @Post('find_address_by_accountId')
+  async getAddress(@Body() { accountId }: { accountId: ObjectId }) {
+    try {
+      const addressList = await this.addressService.find({
+        accountId: accountId,
+      });
+      return new ResponseBuilder(addressList).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
+  @Post('create_address')
+  async createAddress(@Body() createAddressDto: CreateAddressDto) {
+    try {
+      const addressList = await this.addressService.find({
+        accountId: createAddressDto.accountId,
+      });
+      if (createAddressDto?.isDefault) {
+        for (const address of addressList) {
+          await this.addressService.update(
+            { _id: address._id },
+            { isDefault: false },
+          );
+        }
+        const newAddress = await this.addressService.create(createAddressDto);
+        return new ResponseBuilder([...addressList, newAddress]).build();
+      } else {
+        const newAddress = await this.addressService.create({
+          ...createAddressDto,
+          isDefault: addressList.length === 0 ? true : false,
+        });
+        return new ResponseBuilder([...addressList, newAddress]).build();
+      }
     } catch (err) {
       return new ResponseBuilder()
         .withCode(ResponseCodeEnum.BAD_REQUEST)
