@@ -6,6 +6,12 @@ export class CreateAddressDto {
   accountId: ObjectId;
 
   @IsString()
+  receiver: string;
+
+  @IsString()
+  phoneNumber: string;
+
+  @IsString()
   provinceName: string;
 
   @IsNumber()
@@ -20,8 +26,11 @@ export class CreateAddressDto {
   @IsString()
   wardName: string;
 
-  @IsNumber()
-  wardCode: number;
+  @IsString()
+  wardCode: string;
+
+  @IsString()
+  homeAddress: string;
 
   @IsOptional()
   @IsBoolean()

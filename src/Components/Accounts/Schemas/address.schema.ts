@@ -31,7 +31,7 @@ export class Address {
   wardName: string;
 
   @Prop()
-  wardCode: number;
+  wardCode: string;
 
   @Prop()
   homeAddress: string;

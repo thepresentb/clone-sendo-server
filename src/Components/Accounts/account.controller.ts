@@ -183,15 +183,17 @@ export class AccountsController {
             { isDefault: false },
           );
         }
-        const newAddress = await this.addressService.create(createAddressDto);
-        return new ResponseBuilder([...addressList, newAddress]).build();
+        await this.addressService.create(createAddressDto);
       } else {
-        const newAddress = await this.addressService.create({
+        await this.addressService.create({
           ...createAddressDto,
           isDefault: addressList.length === 0 ? true : false,
         });
-        return new ResponseBuilder([...addressList, newAddress]).build();
       }
+      const result = await this.addressService.find({
+        accountId: createAddressDto.accountId,
+      });
+      return new ResponseBuilder(result).build();
     } catch (err) {
       return new ResponseBuilder()
         .withCode(ResponseCodeEnum.BAD_REQUEST)
