@@ -14,6 +14,9 @@ export class Shop {
 
   @Prop()
   address: string;
+
+  @Prop()
+  districtId: number;
 }
 
 export type ShopDocument = HydratedDocument<Shop>;
