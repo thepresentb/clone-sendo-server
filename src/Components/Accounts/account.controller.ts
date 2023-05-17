@@ -10,6 +10,7 @@ import { LoginDto } from './dto/login.dto';
 import { Request } from 'express';
 import { CreateAddressDto } from './dto/createAddress.dto';
 import { ObjectId } from 'mongoose';
+import { EditAddressDto } from './dto/editAddress.dto';
 
 @Controller('accounts')
 export class AccountsController {
@@ -192,6 +193,41 @@ export class AccountsController {
       }
       const result = await this.addressService.find({
         accountId: createAddressDto.accountId,
+      });
+      return new ResponseBuilder(result).build();
+    } catch (err) {
+      return new ResponseBuilder()
+        .withCode(ResponseCodeEnum.BAD_REQUEST)
+        .withMessage(err.message)
+        .build();
+    }
+  }
+
+  @Post('edit_address')
+  async editAddress(@Body() editAddressDto: EditAddressDto) {
+    try {
+      const addressList = await this.addressService.find({
+        accountId: editAddressDto.accountId,
+      });
+      if (editAddressDto?.isDefault) {
+        for (const address of addressList) {
+          await this.addressService.update(
+            { _id: address._id },
+            { isDefault: false },
+          );
+        }
+        await this.addressService.update(
+          { _id: editAddressDto._id },
+          editAddressDto,
+        );
+      } else {
+        await this.addressService.update(
+          { _id: editAddressDto._id },
+          editAddressDto,
+        );
+      }
+      const result = await this.addressService.find({
+        accountId: editAddressDto.accountId,
       });
       return new ResponseBuilder(result).build();
     } catch (err) {

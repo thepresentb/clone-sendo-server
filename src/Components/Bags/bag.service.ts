@@ -14,7 +14,7 @@ export class BagService extends BaseService<Bag> {
     return await this.bagModel.find({ accountId }).populate([
       {
         path: 'productId',
-        populate: ['brandId', 'saleId'],
+        populate: ['brandId', 'saleId', 'shopId'],
       },
     ]);
   }
